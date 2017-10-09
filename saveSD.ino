@@ -58,22 +58,7 @@ void savetosd(){
       }
     }
   }
-  /*
-  for (int i = 0; i < maxlanes; i++) {
-    String temp;
-    if (i = 0){
-      temp = "End:";
-    }
-    /*
-    for (int j = 1; j < maxlaps; j++) {
-      int nextLap = j + 1;
-      if(raceTime[i][j] != 0 && raceTime[i][nextLap] == 0){
-        temp = convertMillis(raceTime[j][i]);
-      }
-    }
-    raceData.print(temp);raceData.print(";");
-  }
-  */
+  
   raceData.println("");
   for (int i = 0; i < maxlanes; i++) {
     String temp;
