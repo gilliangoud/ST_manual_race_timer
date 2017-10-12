@@ -1,17 +1,21 @@
 #define ledPin  13                  // LED connected to digital pin 13
 #define startPin 0                  // start button on pin 4
-#define stopPin1 22                   // stop button on pin 5
-#define stopPin2 23                   // stop button 2 on pin 6
-#define stopPin3 24                   // stop button 3 on pin 7
-#define stopPin4 25                   // stop button 4 on pin 8
-#define stopPin5 26                   // stop button on pin 5
-#define stopPin6 27                   // stop button 2 on pin 6
-#define stopPin7 28                   // stop button 3 on pin 7
-#define stopPin8 29                   // stop button 4 on pin 8
-#define modeSwitch 30               // the mode selector, if the signal pulled to ground sceond mode is enabeled
+#define stopPin1 2                   // stop button on pin 5
+#define stopPin2 3                   // stop button 2 on pin 6
+#define stopPin3 4                   // stop button 3 on pin 7
+#define stopPin4 5                   // stop button 4 on pin 8
+#define stopPin5 6                   // stop button on pin 5
+#define stopPin6 7                   // stop button 2 on pin 6
+#define stopPin7 8                   // stop button 3 on pin 7
+#define stopPin8 9                   // stop button 4 on pin 8
+#define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
 
-#define maxlaps 30
-#define maxlanes 9
+#define sdEnable 0
+#define displayEnable 1
+#define printerEnable 0
+
+#define maxlaps 9
+#define maxlanes 6
 
 #define versions 1.5
 #define lastUpdate "oktober 2017."
@@ -82,7 +86,13 @@ void setup() {
   Serial.println("ST manual race timer by Gillian Goud.");
   Serial.print("Software version: "); Serial.print(versions); Serial.print("     last update: "); Serial.println(lastUpdate);
 
-  sdinit();
+  #if(sdEnable)
+    sdinit();
+  #endif
+  #if(displayEnable)
+  displayInit();
+  printlnScreen("Timer ready");
+  #endif
 
   Serial.println("");
   Serial.println("Ready");
@@ -137,6 +147,9 @@ void startTimer(){
   blinking = true;
   
   Serial.println("Timer started");
+  #if(displayEnable)
+  printlnScreen("Timer started.");
+  #endif
 
   // emptying the array for refilling.
   for (int i = 0; i < maxlaps; i++) {
@@ -152,7 +165,13 @@ void startTimer(){
 void stopTimer(){
   // show in serial
   Serial.print("Timer stopped at ");Serial.print(convertMillis(getElapsedTime()));Serial.print(" for race ");Serial.println(raceNr);
-  savetosd();
+  #if(displayEnable)
+  printScreen("Stopped timer:");printScreen(convertMillis(getElapsedTime()));
+  printlnScreen("");
+  #endif
+  #if(sdEnable)
+    savetosd();
+  #endif
   
   // reset
   startTime = 0;
@@ -192,6 +211,9 @@ void logtime (int button) {
   raceTime[button][thislap] = elapsedMillis;
   String temp = convertMillis(elapsedMillis);
   Serial.print("Button "); Serial.print(button); Serial.print(" was pressed and logged at: "); Serial.println(temp);
+  #if(displayEnable)
+  printScreen("Button ");printScreen(String(button));printScreen(": ");printlnScreen(String(temp));
+  #endif
 }
 
 long getLapMillis(int lane, int lap){
