@@ -11,11 +11,11 @@
 #define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
 
 #define sdEnable 0
-#define displayEnable 1
+#define displayEnable 0
 #define printerEnable 0
 
 #define maxlaps 9
-#define maxlanes 6
+#define maxlanes 9
 
 #define versions 1.5
 #define lastUpdate "oktober 2017."
@@ -34,8 +34,8 @@ Bounce stopSwitch8 = Bounce();
 Bounce modeSwitchS = Bounce();
 
 int modeSelector;
-long previousMillis;
-long startTime;
+unsigned long previousMillis;
+unsigned long startTime;
 int raceNr = 1;
 boolean statusStartSwitch;
 int value = LOW;                    // previous value of the LED
@@ -205,12 +205,12 @@ String convertMillis(long elapsedMillis){
 }
 
 void logtime (int button) {
-  long elapsedMillis =   millis() - startTime;
+  unsigned long elapsedMillis =   millis() - startTime;
   lap[button] ++;
   int thislap = lap[button];
   raceTime[button][thislap] = elapsedMillis;
   String temp = convertMillis(elapsedMillis);
-  Serial.print("Button "); Serial.print(button); Serial.print(" was pressed and logged at: "); Serial.println(temp);
+  Serial.print("Button "); Serial.print(button); Serial.print(" was pressed and logged at: "); Serial.print(temp);Serial.print(" + ");Serial.println(elapsedMillis);
   #if(displayEnable)
   printScreen("Button ");printScreen(String(button));printScreen(": ");printlnScreen(String(temp));
   #endif
