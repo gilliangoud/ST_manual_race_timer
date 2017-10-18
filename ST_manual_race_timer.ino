@@ -1,7 +1,7 @@
 #define ledPin  13                  // LED connected to digital pin 13
-#define startPin 0                  // start button on pin 4
-#define stopPin1 2                   // stop button on pin 5
-#define stopPin2 3                   // stop button 2 on pin 6
+#define startPin 14                  // start button on pin 4
+#define stopPin1 15                   // stop button on pin 5
+#define stopPin2 16                   // stop button 2 on pin 6
 #define stopPin3 4                   // stop button 3 on pin 7
 #define stopPin4 5                   // stop button 4 on pin 8
 #define stopPin5 6                   // stop button on pin 5
@@ -62,23 +62,23 @@ void setup() {
   pinMode(modeSwitch, INPUT_PULLUP);
 
   startSwitch.attach(startPin);
-  startSwitch.interval(3);
+  startSwitch.interval(30);
   stopSwitch1.attach(stopPin1);
-  stopSwitch1.interval(20);
+  stopSwitch1.interval(40);
   stopSwitch2.attach(stopPin2);
-  stopSwitch2.interval(20);
+  stopSwitch2.interval(40);
   stopSwitch3.attach(stopPin3);
-  stopSwitch3.interval(20);
+  stopSwitch3.interval(40);
   stopSwitch4.attach(stopPin4);
-  stopSwitch4.interval(20);
+  stopSwitch4.interval(40);
   stopSwitch5.attach(stopPin5);
-  stopSwitch5.interval(20);
+  stopSwitch5.interval(40);
   stopSwitch6.attach(stopPin6);
-  stopSwitch6.interval(20);
+  stopSwitch6.interval(40);
   stopSwitch7.attach(stopPin7);
-  stopSwitch7.interval(20);
+  stopSwitch7.interval(40);
   stopSwitch8.attach(stopPin8);
-  stopSwitch8.interval(20);
+  stopSwitch8.interval(40);
   
   modeSwitchS.attach(modeSwitch);
   modeSwitchS.interval(3);
@@ -224,4 +224,5 @@ long getLapMillis(int lane, int lap){
 
   return lapMillis;  
 }
+
 
