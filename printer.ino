@@ -28,13 +28,15 @@ void printRace(String stopTime) {
   
   for (int i = 1; i < maxlanes; i++) {
     String temp;
+    int lap;
     for (int j = 1; j < maxlaps; j++) {
       int nextLap = j + 1;
       if(raceTime[i][j] != 0 && raceTime[i][nextLap] == 0){
         temp = convertMillis(raceTime[i][j]);
+        lap = j;
       }
     }
-    printer.print(F("Lane "));printer.print(i);printer.print(F(": "));printer.boldOn();printer.println(temp);printer.boldOff();
+    printer.print(F("Lane "));printer.print(i);printer.print(F(": "));printer.boldOn();printer.print(temp);printer.boldOff();printer.print(F(" lap "));printer.println(lap);
   }
   printer.sleep();      // Tell printer to sleep
 }
