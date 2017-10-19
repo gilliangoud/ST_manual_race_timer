@@ -191,11 +191,11 @@ void stopTimer(){
 }
 
 long getElapsedTime() {
-  long elapsedMillis =   millis() - startTime;
+  unsigned long elapsedMillis =   millis() - startTime;
   return elapsedMillis;
 }
 
-String convertMillis(long elapsedMillis){
+String convertMillis(unsigned long elapsedMillis){
   int seconds = elapsedMillis / 1000L;                // divide by 1000 to convert to seconds
   int minutes = seconds / 60;
   while (seconds >= 60) {

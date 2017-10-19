@@ -34,7 +34,7 @@ void printRace(String stopTime) {
         temp = convertMillis(raceTime[i][j]);
       }
     }
-    printer.print(F("Lane "));printer.println(i);printer.println(F(": "));printer.boldOn();printer.println(temp);printer.boldOff();
+    printer.print(F("Lane "));printer.print(i);printer.print(F(": "));printer.boldOn();printer.println(temp);printer.boldOff();
   }
   printer.sleep();      // Tell printer to sleep
 }
