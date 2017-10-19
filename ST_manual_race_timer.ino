@@ -16,6 +16,7 @@
 
 #define maxlaps 9
 #define maxlanes 9
+#define validRaceTimeout 10000 // set how long a race should have taken to be counted as a valid race in millis, defaults to 10 seconds
 
 #define versions 1.5
 #define lastUpdate "oktober 2017."
@@ -167,24 +168,26 @@ void startTimer(){
 
 void stopTimer(){
   // show in serial
-  Serial.print("Timer stopped at ");Serial.print(convertMillis(getElapsedTime()));Serial.print(" for race ");Serial.println(raceNr);
+  String stopTime = convertMillis(getElapsedTime());
+  unsigned long stopMillis = getElapsedTime();
+  Serial.print("Timer stopped at ");Serial.print(stopTime);Serial.print(" for race ");Serial.println(raceNr);
   #if(displayEnable)
-  printScreen("Stopped timer:");printScreen(convertMillis(getElapsedTime()));
+  printScreen("Stopped timer:");printScreen(stopTime);
   printlnScreen("");
   #endif
   #if(sdEnable)
     savetosd();
   #endif
   #if(printerEnable)
-    printRace();
+    printRace(stopTime);
   #endif
-  
+
   // reset
+  if(stopMillis > validRaceTimeout){
+    raceNr ++;
+  }
   startTime = 0;
   blinking = false;
-  
-  // leave at bottom
-  raceNr ++;
 }
 
 long getElapsedTime() {

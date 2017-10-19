@@ -13,11 +13,29 @@ void printerinit() {
   printer.feed(2);
   printer.sleep();      // Tell printer to sleep
 }
-void printRace() {
+void printRace(String stopTime) {
   printer.wake();       // MUST wake() before printing again, even if reset
-
-  printer.println(F("Sample text"));
-  printer.feed(2);
+  printer.setSize('L');
+  printer.justify('C');
+  printer.print(F("Race "));printer.println(raceNr);
+  printer.setSize('S');
+  printer.boldOn();
+  printer.println(F("Stopped: "));printer.println(stopTime);
+  printer.boldOff();
+  printer.setSize('M');
+  printer.feed(1);
+  printer.justify('L');
+  
+  for (int i = 1; i < maxlanes; i++) {
+    String temp;
+    for (int j = 1; j < maxlaps; j++) {
+      int nextLap = j + 1;
+      if(raceTime[i][j] != 0 && raceTime[i][nextLap] == 0){
+        temp = convertMillis(raceTime[i][j]);
+      }
+    }
+    printer.print(F("Lane "));printer.println(i);printer.println(F(": "));printer.boldOn();printer.println(temp);printer.boldOff();
+  }
   printer.sleep();      // Tell printer to sleep
 }
   /*
