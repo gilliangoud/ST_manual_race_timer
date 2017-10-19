@@ -2,9 +2,9 @@
 #define startPin 14                  // start button on pin 4
 #define stopPin1 15                   // stop button on pin 5
 #define stopPin2 16                   // stop button 2 on pin 6
-#define stopPin3 4                   // stop button 3 on pin 7
-#define stopPin4 5                   // stop button 4 on pin 8
-#define stopPin5 6                   // stop button on pin 5
+#define stopPin3 17                   // stop button 3 on pin 7
+#define stopPin4 18                   // stop button 4 on pin 8
+#define stopPin5 19                   // stop button on pin 5
 #define stopPin6 7                   // stop button 2 on pin 6
 #define stopPin7 8                   // stop button 3 on pin 7
 #define stopPin8 9                   // stop button 4 on pin 8
@@ -12,7 +12,7 @@
 
 #define sdEnable 0
 #define displayEnable 0
-#define printerEnable 0
+#define printerEnable 1
 
 #define maxlaps 9
 #define maxlanes 9
@@ -88,6 +88,9 @@ void setup() {
 
   #if(sdEnable)
     sdinit();
+  #endif
+  #if(printerEnable)
+    printerinit();
   #endif
   #if(displayEnable)
   displayInit();
@@ -171,6 +174,9 @@ void stopTimer(){
   #endif
   #if(sdEnable)
     savetosd();
+  #endif
+  #if(printerEnable)
+    printRace();
   #endif
   
   // reset

@@ -1,8 +1,8 @@
 #if (printerEnable)
 #include "Adafruit_Thermal.h"
 #include "SoftwareSerial.h"
-#define TX_PIN 2 // Arduino transmit  YELLOW WIRE  labeled RX on printer
-#define RX_PIN 3 // Arduino receive   GREEN WIRE   labeled TX on printer
+#define TX_PIN 3 // Arduino transmit  YELLOW WIRE  labeled RX on printer
+#define RX_PIN 2 // Arduino receive   GREEN WIRE   labeled TX on printer
 
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
@@ -17,7 +17,7 @@ void printRace() {
   printer.wake();       // MUST wake() before printing again, even if reset
 
   printer.println(F("Sample text"));
-  
+  printer.feed(2);
   printer.sleep();      // Tell printer to sleep
 }
   /*
