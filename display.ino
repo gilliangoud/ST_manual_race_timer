@@ -22,5 +22,11 @@ void printScreen(String message){
 void printlnScreen(String message){
     oled.println(message);
 }
+
+void printScreenBig(String message){
+    oled.set2X();
+    oled.println(message);
+    oled.set1X();
+}
 #endif
 

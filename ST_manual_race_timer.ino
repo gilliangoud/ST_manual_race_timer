@@ -11,8 +11,8 @@
 #define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
 
 #define sdEnable 0
-#define displayEnable 0
-#define printerEnable 1
+#define displayEnable 1
+#define printerEnable 0
 
 #define maxlaps 9
 #define maxlanes 9
@@ -152,7 +152,9 @@ void startTimer(){
   
   Serial.println("Timer started");
   #if(displayEnable)
-  printlnScreen("Timer started.");
+  String tempp = "Started *" + String(raceNr);
+  printScreenBig(tempp);
+  //printScreen("Started race ");printlnScreen(String(raceNr));
   #endif
 
   // emptying the array for refilling.
@@ -172,7 +174,7 @@ void stopTimer(){
   unsigned long stopMillis = getElapsedTime();
   Serial.print("Timer stopped at ");Serial.print(stopTime);Serial.print(" for race ");Serial.println(raceNr);
   #if(displayEnable)
-  printScreen("Stopped timer:");printScreen(stopTime);
+  printScreen("Stop race ");printScreen(String(raceNr));printScreen(": ");printScreen(stopTime);
   printlnScreen("");
   #endif
   #if(sdEnable)
@@ -185,6 +187,9 @@ void stopTimer(){
   // reset
   if(stopMillis > validRaceTimeout){
     raceNr ++;
+    #if(displayEnable)
+    printScreen("New race: ");printlnScreen(String(raceNr));
+    #endif
   }
   startTime = 0;
   blinking = false;
