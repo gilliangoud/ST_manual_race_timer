@@ -3,11 +3,11 @@
 #define stopPin1 15                   // stop button on pin 5
 #define stopPin2 16                   // stop button 2 on pin 6
 #define stopPin3 17                   // stop button 3 on pin 7
-#define stopPin4 18                   // stop button 4 on pin 8
-#define stopPin5 19                   // stop button on pin 5
-#define stopPin6 7                   // stop button 2 on pin 6
-#define stopPin7 8                   // stop button 3 on pin 7
-#define stopPin8 9                   // stop button 4 on pin 8
+#define stopPin4 5                   // stop button 4 on pin 8
+#define stopPin5 6                   // stop button on pin 5
+#define stopPin6 4                   // stop button 2 on pin 6
+#define stopPin7 7                   // stop button 3 on pin 7
+#define stopPin8 8                   // stop button 4 on pin 8
 #define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
 
 #define sdEnable 0
