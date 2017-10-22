@@ -1,16 +1,16 @@
 #define ledPin  13                  // LED connected to digital pin 13
-#define startPin 14                  // start button on pin 4
-#define stopPin1 15                   // stop button on pin 5
-#define stopPin2 16                   // stop button 2 on pin 6
-#define stopPin3 17                   // stop button 3 on pin 7
-#define stopPin4 5                   // stop button 4 on pin 8
-#define stopPin5 6                   // stop button on pin 5
-#define stopPin6 4                   // stop button 2 on pin 6
-#define stopPin7 7                   // stop button 3 on pin 7
-#define stopPin8 8                   // stop button 4 on pin 8
+#define startPin 6                  // start button on pin 4
+#define stopPin1 4                   // stop button on pin 5
+#define stopPin2 5                   // stop button 2 on pin 6
+#define stopPin3 2                   // stop button 3 on pin 7
+#define stopPin4 3                   // stop button 4 on pin 8
+#define stopPin5 15                   // stop button on pin 5
+#define stopPin6 14                   // stop button 2 on pin 6
+#define stopPin7 52                   // stop button 3 on pin 7
+#define stopPin8 44                   // stop button 4 on pin 8
 #define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
 
-#define sdEnable 0
+#define sdEnable 1
 #define displayEnable 1
 #define printerEnable 0
 
@@ -32,9 +32,9 @@ Bounce stopSwitch5 = Bounce();
 Bounce stopSwitch6 = Bounce();
 Bounce stopSwitch7 = Bounce();
 Bounce stopSwitch8 = Bounce();
-Bounce modeSwitchS = Bounce();
+//Bounce modeSwitchS = Bounce();
 
-int modeSelector;
+//int modeSelector;
 unsigned long previousMillis;
 unsigned long startTime;
 int raceNr = 1;
@@ -60,7 +60,7 @@ void setup() {
   pinMode(stopPin7, INPUT_PULLUP);
   pinMode(stopPin8, INPUT_PULLUP);
   
-  pinMode(modeSwitch, INPUT_PULLUP);
+  //pinMode(modeSwitch, INPUT_PULLUP);
 
   startSwitch.attach(startPin);
   startSwitch.interval(30);
@@ -81,21 +81,26 @@ void setup() {
   stopSwitch8.attach(stopPin8);
   stopSwitch8.interval(40);
   
-  modeSwitchS.attach(modeSwitch);
-  modeSwitchS.interval(3);
+  //modeSwitchS.attach(modeSwitch);
+  //modeSwitchS.interval(3);
+
+  pinMode(50, OUTPUT);
+  digitalWrite(50, LOW);
+  pinMode(42, OUTPUT);
+  digitalWrite(42, LOW);
 
   Serial.println("ST manual race timer by Gillian Goud.");
   Serial.print("Software version: "); Serial.print(versions); Serial.print("     last update: "); Serial.println(lastUpdate);
 
+  #if(displayEnable)
+  displayInit();
+  printlnScreen("Timer ready");
+  #endif
   #if(sdEnable)
     sdinit();
   #endif
   #if(printerEnable)
     printerinit();
-  #endif
-  #if(displayEnable)
-  displayInit();
-  printlnScreen("Timer ready");
   #endif
 
   Serial.println("");
@@ -104,12 +109,12 @@ void setup() {
 }
 
 void loop() {
-  modeSwitchS.update();
+  /*modeSwitchS.update();
   if (modeSwitchS.fell()) {
     modeSelector = 1;
   } else if (modeSwitchS.rose()) {
     modeSelector = 0;
-  }
+  }*/
 
   startSwitch.update();stopSwitch1.update();stopSwitch2.update();stopSwitch3.update();stopSwitch4.update();stopSwitch5.update();stopSwitch6.update();stopSwitch7.update();stopSwitch8.update();
   
@@ -188,14 +193,14 @@ void stopTimer(){
   if(stopMillis > validRaceTimeout){
     raceNr ++;
     #if(displayEnable)
-    printScreen("New race: ");printlnScreen(String(raceNr));
+    printScreen("Now starting race: ");printlnScreen(String(raceNr));
     #endif
   }
   startTime = 0;
   blinking = false;
 }
 
-long getElapsedTime() {
+unsigned long getElapsedTime() {
   unsigned long elapsedMillis =   millis() - startTime;
   return elapsedMillis;
 }
@@ -230,11 +235,11 @@ void logtime (int button) {
   #endif
 }
 
-long getLapMillis(int lane, int lap){
+unsigned long getLapMillis(int lane, int lap){
   int previousLap = lap - 1;
-  long previousElapsedMillis = raceTime[lane][previousLap];
-  long currentElapsedMillis = raceTime[lane][lap];
-  long lapMillis = currentElapsedMillis - previousElapsedMillis;
+  unsigned long previousElapsedMillis = raceTime[lane][previousLap];
+  unsigned long currentElapsedMillis = raceTime[lane][lap];
+  unsigned long lapMillis = currentElapsedMillis - previousElapsedMillis;
 
   return lapMillis;  
 }

@@ -1,19 +1,39 @@
 #if (sdEnable == true)
 #include "SD.h"
+//#include "SdFat.h"
 #include"SPI.h"
-const int CSpin = 4;
-File raceData;
+
+//SdFat SD;
+
+//const int SD_CS_PIN = 7;
+
+
+#define SD_CS_PIN 10
 
 void sdinit() {
   Serial.print("Initializing SD card...");
-  pinMode(CSpin, OUTPUT);
+  pinMode(SD_CS_PIN, OUTPUT);
 
-  if (!SD.begin(CSpin)) {
+  if (!SD.begin(SD_CS_PIN)) {
     Serial.println("Card failed, or not present... Stopping here...");
+    #if(displayEnable)
+    printScreenBig("NO SD HERE!");
+    #endif
     // don't do anything more:
     return;
   }
   Serial.println("card initialized.");
+  #if(displayEnable)
+  printlnScreen("SD card loaded");
+  #endif
+
+  if(SD.exists("race1.CSV")){
+    #if(displayEnable)
+    printlnScreen("Race 1 already on SD,");
+    printlnScreen("New raceData will be");
+    printlnScreen("written underneath.");
+    #endif
+  }
 
   /*
   if (SD.exists("data.CSV")) {
@@ -29,6 +49,7 @@ void sdinit() {
 }
 
 void savetosd(){
+  File raceData;
   String filename = "race" + String(raceNr) + ".CSV";
   raceData = SD.open(filename, FILE_WRITE);
   
@@ -73,6 +94,9 @@ void savetosd(){
   }
   
   raceData.close(); // close the file
+  #if(displayEnable)
+    printlnScreen("Written to SD.");
+  #endif
 }
 #endif
 
