@@ -92,7 +92,7 @@ void savetosd(){
     }
     raceData.print(temp);raceData.print(";");
   }
-  
+  raceData.println("");
   raceData.close(); // close the file
   #if(displayEnable)
     printlnScreen("Written to SD.");

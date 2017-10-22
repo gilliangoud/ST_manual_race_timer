@@ -6,15 +6,18 @@
 #define stopPin4 3                   // stop button 4 on pin 8
 #define stopPin5 15                   // stop button on pin 5
 #define stopPin6 14                   // stop button 2 on pin 6
-#define stopPin7 52                   // stop button 3 on pin 7
+#define stopPin7 46                   // stop button 3 on pin 7
 #define stopPin8 44                   // stop button 4 on pin 8
 #define modeSwitch 10               // the mode selector, if the signal pulled to ground sceond mode is enabeled
+
+#define raceUpPin 38
+#define raceDownPin 34
 
 #define sdEnable 1
 #define displayEnable 1
 #define printerEnable 0
 
-#define maxlaps 9
+#define maxlaps 30
 #define maxlanes 9
 #define validRaceTimeout 10000 // set how long a race should have taken to be counted as a valid race in millis, defaults to 10 seconds
 
@@ -34,6 +37,9 @@ Bounce stopSwitch7 = Bounce();
 Bounce stopSwitch8 = Bounce();
 //Bounce modeSwitchS = Bounce();
 
+Bounce raceUp = Bounce();
+Bounce raceDown = Bounce();
+
 //int modeSelector;
 unsigned long previousMillis;
 unsigned long startTime;
@@ -43,11 +49,17 @@ int value = LOW;                    // previous value of the LED
 int blinking;                       // condition for blinking - timer is timing
 long interval = 100;                // blink interval - change to suit
 
-int raceTime[maxlanes][maxlaps];
-int lap[maxlaps];
+unsigned long raceTime[maxlanes][maxlaps];
+unsigned long lap[maxlaps];
 
 void setup() {
   Serial.begin(9600);
+
+  pinMode(48, OUTPUT);
+  pinMode(36, OUTPUT);
+
+  digitalWrite(48, LOW);
+  digitalWrite(36, LOW);
 
   pinMode(ledPin, OUTPUT);
   pinMode(startPin, INPUT_PULLUP);
@@ -59,6 +71,9 @@ void setup() {
   pinMode(stopPin6, INPUT_PULLUP);
   pinMode(stopPin7, INPUT_PULLUP);
   pinMode(stopPin8, INPUT_PULLUP);
+
+  pinMode(raceUpPin, INPUT_PULLUP);
+  pinMode(raceDownPin, INPUT_PULLUP);
   
   //pinMode(modeSwitch, INPUT_PULLUP);
 
@@ -80,14 +95,14 @@ void setup() {
   stopSwitch7.interval(40);
   stopSwitch8.attach(stopPin8);
   stopSwitch8.interval(40);
+
+  raceUp.attach(raceUpPin);
+  raceUp.interval(3);
+  raceDown.attach(raceDownPin);
+  raceDown.interval(3);
   
   //modeSwitchS.attach(modeSwitch);
   //modeSwitchS.interval(3);
-
-  pinMode(50, OUTPUT);
-  digitalWrite(50, LOW);
-  pinMode(42, OUTPUT);
-  digitalWrite(42, LOW);
 
   Serial.println("ST manual race timer by Gillian Goud.");
   Serial.print("Software version: "); Serial.print(versions); Serial.print("     last update: "); Serial.println(lastUpdate);
@@ -115,6 +130,19 @@ void loop() {
   } else if (modeSwitchS.rose()) {
     modeSelector = 0;
   }*/
+
+  raceUp.update();raceDown.update();
+  if (raceUp.fell()) {
+    raceNr++;
+    Serial.print("Current race: ");Serial.println(raceNr);
+    #if(displayEnable)
+    printScreen("Current race: ");printlnScreen(String(raceNr));
+    #endif
+  } else if (raceDown.fell()) {
+    raceNr--;
+    Serial.print("Current race: ");Serial.println(raceNr);
+    printScreen("Current race: ");printlnScreen(String(raceNr));
+  }
 
   startSwitch.update();stopSwitch1.update();stopSwitch2.update();stopSwitch3.update();stopSwitch4.update();stopSwitch5.update();stopSwitch6.update();stopSwitch7.update();stopSwitch8.update();
   
@@ -211,7 +239,7 @@ String convertMillis(unsigned long elapsedMillis){
   while (seconds >= 60) {
     seconds = seconds - 60;
   }
-  long fractional = (int)(elapsedMillis % 1000L);
+  unsigned long fractional = (int)(elapsedMillis % 1000L);
   String fracString;
   if (fractional == 0) {fracString = "000";}
   else if (fractional < 10) {fracString = String("00") + String(fractional);}
@@ -229,7 +257,7 @@ void logtime (int button) {
   int thislap = lap[button];
   raceTime[button][thislap] = elapsedMillis;
   String temp = convertMillis(elapsedMillis);
-  Serial.print("Button "); Serial.print(button); Serial.print(" was pressed and logged at: "); Serial.print(temp);Serial.print(" + ");Serial.println(elapsedMillis);
+  Serial.print("Button "); Serial.print(button); Serial.print(" ("); Serial.print(thislap); Serial.print(") was pressed and logged at: "); Serial.print(temp);Serial.print(" + ");Serial.println(elapsedMillis);
   #if(displayEnable)
   printScreen("Button ");printScreen(String(button));printScreen(": ");printlnScreen(String(temp));
   #endif
