@@ -28,10 +28,15 @@ void sdinit() {
   #endif
 
   if(SD.exists("race1.CSV")){
+    raceNr++;
+    for (int i = 1;;i++){
+      if(checkSD(i)){} else {break;}
+    }
     #if(displayEnable)
-    printlnScreen("Race 1 already on SD,");
+    printlnScreen("Races already on SD,");
     printlnScreen("New raceData will be");
     printlnScreen("written underneath.");
+    printScreen("Current race: ");printlnScreen(String(raceNr));
     #endif
   }
 
@@ -46,6 +51,15 @@ void sdinit() {
       raceData.close(); // close the file
     }
   }*/
+}
+
+boolean checkSD(int i){
+  if(SD.exists("race" + String(i) + ".CSV")){
+      raceNr++;
+      return true;
+  } else {
+    return false;
+  }
 }
 
 void savetosd(){
