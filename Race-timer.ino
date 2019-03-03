@@ -92,7 +92,7 @@ void loop() {
   if (tempStartTime > 0 && (millis() - tempStartTime) > 500) {
     tempStartTime = 0;
   }
-  
+
   if (button[1].fell()) {
     if (timerStarted == true) {
       stopTimer();
@@ -150,7 +150,7 @@ String lapTimeMessage(int lane, long elapsedMillis) {
 }
 
 String msToTimeConverter(long elapsedTime) {
-  int seconds = elapsedTime / 1000L;                // divide by 1000 to convert to seconds
+  int seconds = elapsedTime / 1000L;
   int minutes = seconds / 60;
 
   while (seconds >= 60) {
